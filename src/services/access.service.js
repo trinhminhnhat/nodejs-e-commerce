@@ -2,7 +2,7 @@
 
 const shopModel = require('../models/shop.model');
 const bcrypt = require('bcrypt');
-const crypto = require('node:crypto');
+const crypto = require('crypto');
 
 const { createTokenPair } = require('../auth/authUtils');
 const KeyTokenService = require('./keyToken.service');
@@ -37,23 +37,36 @@ class AccessService {
             });
 
             if (newShop) {
-                const privateKey = crypto.randomBytes(64).toString('hex');
-                const publicKey = crypto.randomBytes(64).toString('hex');
+                // create privateKey, publicKey
+                const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
+                    modulusLength: 4096,
+                    publicKeyEncoding: {
+                        type: 'pkcs1',
+                        format: 'pem',
+                    },
+                    privateKeyEncoding: {
+                        type: 'pkcs1',
+                        format: 'pem',
+                    },
+                });
+                // pkcs meaning: Public key cryptography standards
 
-                const keyStore = await KeyTokenService.createKeyToken({
+                // save publicKey to database
+                const publicKeyString = await KeyTokenService.createKeyToken({
                     userId: newShop._id,
-                    privateKey,
                     publicKey,
                 });
 
-                if (!keyStore) {
+                if (!publicKeyString) {
                     return {
                         code: 'xxx',
-                        message: 'keyStore error',
+                        message: 'publicKeyString error',
                     };
                 }
 
-                const tokens = await createTokenPair({ userId: newShop._id, email }, publicKey, privateKey);
+                const publicKeyObject = crypto.createPublicKey(publicKeyString);
+
+                const tokens = await createTokenPair({ userId: newShop._id, email }, publicKeyObject, privateKey);
 
                 return {
                     code: 200,
