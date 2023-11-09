@@ -3,6 +3,7 @@
 ### signUp
 POST {{urlDev}}shop/sign-up
 Content-Type: application/json
+x-api-key: helloWorld
 
 {
     "name": "Demo",
