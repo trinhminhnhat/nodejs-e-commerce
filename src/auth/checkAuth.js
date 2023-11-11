@@ -1,5 +1,6 @@
 'use strict';
 
+const { BadRequestError } = require('../core/error.response');
 const { findById } = require('../services/apiKey.service');
 
 const HEADER = {
@@ -12,18 +13,14 @@ const apiKey = async (req, res, next) => {
         const key = req.headers[HEADER.API_KEY]?.toString();
 
         if (!key) {
-            return res.status(403).json({
-                message: 'Forbidden error1',
-            });
+            throw new BadRequestError('Api key is required');
         }
 
         // check objKey
         const objKey = await findById(key);
 
         if (!objKey) {
-            return res.status(403).json({
-                message: 'Forbidden error2',
-            });
+            throw new BadRequestError('Api key not found');
         }
 
         req.objKey = objKey;
