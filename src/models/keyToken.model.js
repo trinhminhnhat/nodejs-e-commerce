@@ -1,7 +1,7 @@
 const { model, Schema, Types } = require('mongoose'); // Erase if already required
 
-const DOCUMENT_NAME = 'Key';
-const COLLECTION_NAME = 'Keys';
+const DOCUMENT_NAME = 'KeyToken';
+const COLLECTION_NAME = 'KeyTokens';
 
 // Declare the Schema of the Mongo model
 const keyTokenSchema = new Schema(
@@ -19,9 +19,13 @@ const keyTokenSchema = new Schema(
             type: String,
             required: true,
         },
-        refreshToken: {
+        refreshTokensUsed: { // refresh tokens has been used
             type: Array,
             default: [],
+        },
+        refreshToken: { // refresh token in use
+            type: String,
+            required: true,
         },
     },
     {

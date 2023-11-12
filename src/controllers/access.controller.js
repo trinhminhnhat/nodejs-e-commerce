@@ -1,13 +1,18 @@
 'use strict';
 
-const { Created } = require('../core/success.response');
+const { Ok, Created } = require('../core/success.response');
 const AccessService = require('../services/access.service');
 
 class AccessController {
-    signUp = async (req, res, next) => {
-        console.log(`[P]::signUp::`, req.body);
+    login = async (req, res) => {
+        new Ok({
+            message: 'Login successfully',
+            metadata: await AccessService.login(req.body),
+        }).send(res);
+    };
 
-        return new Created({
+    signUp = async (req, res, next) => {
+        new Created({
             message: 'Shop created successfully',
             metadata: await AccessService.signUp(req.body),
             // options: {
