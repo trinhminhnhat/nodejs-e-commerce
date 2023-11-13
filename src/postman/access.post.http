@@ -1,5 +1,15 @@
 @urlDev=http://localhost:3000/v1/api/
 
+### Login
+POST {{urlDev}}shop/login
+Content-Type: application/json
+x-api-key: helloworld
+
+{
+    "email": "test1@gmail.com",
+    "password": "abc123"
+}
+
 ### signUp
 POST {{urlDev}}shop/sign-up
 Content-Type: application/json
@@ -10,3 +20,10 @@ x-api-key: helloWorld
     "email": "test1@gmail.com",
     "password": "abc123"
 }
+
+### Logout
+POST {{urlDev}}shop/logout
+Content-Type: application/json
+x-api-key: helloworld
+x-client-id: 1
+authorization: accessToken

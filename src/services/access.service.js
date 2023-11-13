@@ -47,6 +47,10 @@ class AccessService {
         };
     };
 
+    static logout = async (keyStore) => {
+        return await KeyTokenService.removeKeyTokenById(keyStore._id);
+    };
+
     static signUp = async ({ name, email, password }) => {
         // check email exists
         const holderShop = await shopModel.findOne({ email }).lean();
