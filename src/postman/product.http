@@ -1,0 +1,30 @@
+@urlDev=http://localhost:3000/v1/api/
+
+### Create product
+POST {{urlDev}}products
+Content-Type: application/json
+x-api-key: helloworld
+x-client-id: 1
+authorization: accessToken
+
+{
+    "productName": "iPhone 15 Pro Max 256GB",
+    "productThumb": "productThumb",
+    "productDescription": "6.7-inch Super Retina XDR display footnote, featuring ProMotion, Always-On, and Dynamic Island",
+    "productPrice": 1199,
+    "productQuantity": 100,
+    "productType": "Furniture",
+    "productAttributes": {
+        "brand": "Apple",
+        "size": "Max",
+        "material": "Steel"
+    },
+    "productRatings": 5,
+    "productVariations": ["Normal", "Plus", "Pro", "Pro Max"]
+}
+### Get all draft products
+GET {{urlDev}}products/drafts
+Content-Type: application/json
+x-api-key: helloworld
+x-client-id: 1
+authorization: accessToken

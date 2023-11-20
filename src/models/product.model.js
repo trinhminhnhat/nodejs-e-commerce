@@ -1,4 +1,5 @@
 const { model, Schema, Types } = require('mongoose'); // Erase if already required
+const slugify = require('slugify');
 
 const DOCUMENT_NAME = 'Product';
 const COLLECTION_NAME = 'Products';
@@ -15,6 +16,7 @@ const productSchema = new Schema(
             required: true,
         },
         productDescription: String,
+        productSlug: String,
         productPrice: {
             type: Number,
             required: true,
@@ -26,15 +28,38 @@ const productSchema = new Schema(
         productType: {
             type: String,
             required: true,
-            enum: ['Electronics', 'Clothing', 'Furniture'],
+            enum: ['Electronic', 'Clothing', 'Furniture'],
         },
         productShop: {
             type: Types.ObjectId,
             ref: 'Shop',
         },
         productAttributes: {
-            type: Types.Mixed,
+            type: Schema.Types.Mixed,
             required: true,
+        },
+        productRatings: {
+            type: Number,
+            default: 4.5,
+            min: [1, 'Rating must be above 1.0'],
+            max: [5, 'Rating must be below 5.0'],
+            set: (val) => Math.round(val * 10) / 10,
+        },
+        productVariations: {
+            type: Array,
+            default: [],
+        },
+        isDraft: {
+            type: Boolean,
+            default: true,
+            index: true,
+            select: false,
+        },
+        isPublished: {
+            type: Boolean,
+            default: false,
+            index: true,
+            select: false,
         },
     },
     {
@@ -42,6 +67,12 @@ const productSchema = new Schema(
         collection: COLLECTION_NAME,
     },
 );
+
+// document middleware: run before .save() and .create(), ...
+productSchema.pre('save', function (next) {
+    this.productSlug = slugify(this.productName, { lower: true });
+    next();
+});
 
 const clothingSchema = new Schema(
     {
@@ -51,6 +82,10 @@ const clothingSchema = new Schema(
         },
         size: String,
         material: String,
+        productShop: {
+            type: Types.ObjectId,
+            ref: 'Shop',
+        },
     },
     {
         timestamps: true,
@@ -66,10 +101,33 @@ const electronicSchema = new Schema(
         },
         model: String,
         color: String,
+        productShop: {
+            type: Types.ObjectId,
+            ref: 'Shop',
+        },
     },
     {
         timestamps: true,
         collection: 'Electronics',
+    },
+);
+
+const furnitureSchema = new Schema(
+    {
+        brand: {
+            type: String,
+            required: true,
+        },
+        size: String,
+        material: String,
+        productShop: {
+            type: Types.ObjectId,
+            ref: 'Shop',
+        },
+    },
+    {
+        timestamps: true,
+        collection: 'Furniture',
     },
 );
 
@@ -78,4 +136,5 @@ module.exports = {
     productSchema: model(DOCUMENT_NAME, productSchema),
     clothingSchema: model('Clothing', clothingSchema),
     electronicSchema: model('Electronic', electronicSchema),
+    furnitureSchema: model('Furniture', furnitureSchema),
 };
