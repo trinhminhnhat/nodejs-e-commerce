@@ -1,7 +1,7 @@
 @urlDev=http://localhost:3000/v1/api/
 
 ### Login
-POST {{urlDev}}shop/login
+POST {{urlDev}}auth/shop/login
 Content-Type: application/json
 x-api-key: helloworld
 
@@ -11,7 +11,7 @@ x-api-key: helloworld
 }
 
 ### signUp
-POST {{urlDev}}shop/sign-up
+POST {{urlDev}}auth/shop/sign-up
 Content-Type: application/json
 x-api-key: helloWorld
 
@@ -22,14 +22,14 @@ x-api-key: helloWorld
 }
 
 ### Logout
-POST {{urlDev}}shop/logout
+POST {{urlDev}}auth/shop/logout
 Content-Type: application/json
 x-api-key: helloworld
 x-client-id: 1
 authorization: accessToken
 
 ### Handle refresh token
-POST {{urlDev}}shop/handle-refresh-token
+POST {{urlDev}}auth/shop/handle-refresh-token
 Content-Type: application/json
 x-api-key: helloworld
 x-client-id: 1

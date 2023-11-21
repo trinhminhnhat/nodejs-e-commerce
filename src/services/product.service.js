@@ -2,7 +2,11 @@
 
 const { BadRequestError } = require('../core/error.response');
 const { productSchema, clothingSchema, electronicSchema, furnitureSchema } = require('../models/product.model');
-const { getAllDraftProducts } = require('../repositories/product.repository');
+const {
+    getAllDraftProducts,
+    publishProductByShop,
+    getAllPublishedProducts,
+} = require('../repositories/product.repository');
 
 // define Factory class to create product
 class ProductFactory {
@@ -24,6 +28,16 @@ class ProductFactory {
         const query = { productShop, isDraft: true };
 
         return await getAllDraftProducts({ query, limit, skip });
+    }
+
+    static async getAllPublishedProducts({ productShop, limit = 50, skip = 0 }) {
+        const query = { productShop, isPublished: true };
+
+        return await getAllPublishedProducts({ query, limit, skip });
+    }
+
+    static async publishProductByShop({ productShop, productId }) {
+        return await publishProductByShop({ productShop, productId });
     }
 }
 

@@ -29,7 +29,6 @@ class ProductController {
 
     /**
      * Get all draft products of shop
-     * @param {Number} productShop - id of shop
      * @param {Number} limit
      * @param {Number} skip
      * @return {JSON}
@@ -41,6 +40,38 @@ class ProductController {
                 productShop: req.user.userId,
                 limit: req.query.limit,
                 skip: req.query.skip,
+            }),
+        }).send(res);
+    };
+
+    /**
+     * Get all published products of shop
+     * @param {Number} limit
+     * @param {Number} skip
+     * @return {JSON}
+     */
+    getAllPublishedProducts = async (req, res) => {
+        new Ok({
+            message: 'Get all published products successfully',
+            metadata: await ProductService.getAllPublishedProducts({
+                productShop: req.user.userId,
+                limit: req.query.limit,
+                skip: req.query.skip,
+            }),
+        }).send(res);
+    };
+
+    /**
+     * Publish a product by shop
+     * @param {Number} productId
+     * @return {JSON}
+     */
+    publishProductByShop = async (req, res) => {
+        new Ok({
+            message: 'Publish product successfully',
+            metadata: await ProductService.publishProductByShop({
+                productShop: req.user.userId,
+                productId: req.params.id,
             }),
         }).send(res);
     };

@@ -22,8 +22,24 @@ authorization: accessToken
     "productRatings": 5,
     "productVariations": ["Normal", "Plus", "Pro", "Pro Max"]
 }
+
+### Publish a product
+PATCH {{urlDev}}products/:id/publish
+Content-Type: application/json
+x-api-key: helloworld
+x-client-id: 1
+authorization: accessToken
+
 ### Get all draft products
 GET {{urlDev}}products/drafts
+Content-Type: application/json
+x-api-key: helloworld
+x-client-id: 1
+authorization: accessToken
+
+
+### Get all draft products
+GET {{urlDev}}products/published
 Content-Type: application/json
 x-api-key: helloworld
 x-client-id: 1
