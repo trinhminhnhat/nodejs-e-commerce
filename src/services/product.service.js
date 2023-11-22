@@ -6,6 +6,8 @@ const {
     getAllDraftProducts,
     publishProductByShop,
     getAllPublishedProducts,
+    unPublishProductByShop,
+    searchProductsByKeyword,
 } = require('../repositories/product.repository');
 
 // define Factory class to create product
@@ -38,6 +40,14 @@ class ProductFactory {
 
     static async publishProductByShop({ productShop, productId }) {
         return await publishProductByShop({ productShop, productId });
+    }
+
+    static async unPublishProductByShop({ productShop, productId }) {
+        return await unPublishProductByShop({ productShop, productId });
+    }
+
+    static async searchProductsByKeyword({ keyword }) {
+        return await searchProductsByKeyword({ keyword });
     }
 }
 

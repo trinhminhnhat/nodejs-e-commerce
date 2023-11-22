@@ -25,6 +25,35 @@ const publishProductByShop = async ({ productShop, productId }) => {
     return await product.save();
 };
 
+const unPublishProductByShop = async ({ productShop, productId }) => {
+    const product = await productSchema.findOne({
+        productShop: new Types.ObjectId(productShop),
+        _id: new Types.ObjectId(productId),
+    });
+
+    if (!product) return null;
+
+    product.isDraft = true;
+    product.isPublished = false;
+
+    return await product.save();
+};
+
+const searchProductsByKeyword = async ({ keyword }) => {
+    const regexSearch = new RegExp(keyword);
+
+    return await productSchema
+        .find(
+            {
+                isPublished: true,
+                $text: { $search: regexSearch },
+            },
+            { score: { $meta: 'textScore' } },
+        )
+        .sort({ score: { $meta: 'textScore' } })
+        .lean();
+};
+
 const productQuery = async ({ query, limit, skip }) => {
     return await productSchema
         .find(query)
@@ -40,4 +69,6 @@ module.exports = {
     getAllDraftProducts,
     publishProductByShop,
     getAllPublishedProducts,
+    unPublishProductByShop,
+    searchProductsByKeyword,
 };

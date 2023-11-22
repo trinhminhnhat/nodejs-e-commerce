@@ -75,6 +75,33 @@ class ProductController {
             }),
         }).send(res);
     };
+
+    /**
+     * Un publish a product by shop
+     * @param {Number} productId
+     * @return {JSON}
+     */
+    unPublishProductByShop = async (req, res) => {
+        new Ok({
+            message: 'Un Publish product successfully',
+            metadata: await ProductService.unPublishProductByShop({
+                productShop: req.user.userId,
+                productId: req.params.id,
+            }),
+        }).send(res);
+    };
+
+    /**
+     * Search products by keyword
+     * @param {String} keyword
+     * @return {JSON}
+     */
+    searchByKeyword = async (req, res) => {
+        new Ok({
+            message: 'Search products successfully',
+            metadata: await ProductService.searchProductsByKeyword(req.params),
+        }).send(res);
+    };
 }
 
 module.exports = new ProductController();

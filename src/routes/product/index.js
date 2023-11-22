@@ -8,6 +8,9 @@ const { authentication } = require('../../auth/authUtils');
 
 const router = express.Router();
 
+// search products by keyword
+router.get('/search/:keyword', asyncHandler(productController.searchByKeyword));
+
 // Authentication
 router.use(authentication);
 
@@ -16,6 +19,9 @@ router.post('/', asyncHandler(productController.create));
 
 // publish a product
 router.patch('/:id/publish', asyncHandler(productController.publishProductByShop));
+
+// un publish a product
+router.patch('/:id/un-publish', asyncHandler(productController.unPublishProductByShop));
 
 // get all draft products
 router.get('/drafts', asyncHandler(productController.getAllDraftProducts));

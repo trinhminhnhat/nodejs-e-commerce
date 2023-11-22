@@ -30,6 +30,13 @@ x-api-key: helloworld
 x-client-id: 1
 authorization: accessToken
 
+### Un Publish a product
+PATCH {{urlDev}}products/:id/un-publish
+Content-Type: application/json
+x-api-key: helloworld
+x-client-id: 1
+authorization: accessToken
+
 ### Get all draft products
 GET {{urlDev}}products/drafts
 Content-Type: application/json
@@ -37,10 +44,14 @@ x-api-key: helloworld
 x-client-id: 1
 authorization: accessToken
 
-
 ### Get all draft products
 GET {{urlDev}}products/published
 Content-Type: application/json
 x-api-key: helloworld
 x-client-id: 1
 authorization: accessToken
+
+### Search products by keyword
+GET {{urlDev}}products/search/:keyword
+Content-Type: application/json
+x-api-key: helloworld
