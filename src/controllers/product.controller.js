@@ -102,6 +102,34 @@ class ProductController {
             metadata: await ProductService.searchProductsByKeyword(req.params),
         }).send(res);
     };
+
+    /**
+     * Get all products
+     * @param {Number} limit
+     * @param {String} sort
+     * @param {Number} page
+     * @return {JSON}
+     */
+    getAllProducts = async (req, res) => {
+        new Ok({
+            message: 'Get all products successfully',
+            metadata: await ProductService.getAllProducts(req.query),
+        }).send(res);
+    };
+
+    /**
+     * Find a product by id
+     * @param {Number} productId
+     * @return {JSON}
+     */
+    findProduct = async (req, res) => {
+        new Ok({
+            message: 'Find a product successfully',
+            metadata: await ProductService.findProduct({
+                productId: req.params.id,
+            }),
+        }).send(res);
+    };
 }
 
 module.exports = new ProductController();

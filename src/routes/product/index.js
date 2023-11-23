@@ -11,6 +11,12 @@ const router = express.Router();
 // search products by keyword
 router.get('/search/:keyword', asyncHandler(productController.searchByKeyword));
 
+// get all products
+router.get('/', asyncHandler(productController.getAllProducts));
+
+// find a product by id
+router.get('/:id', asyncHandler(productController.findProduct));
+
 // Authentication
 router.use(authentication);
 

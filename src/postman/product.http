@@ -55,3 +55,13 @@ authorization: accessToken
 GET {{urlDev}}products/search/:keyword
 Content-Type: application/json
 x-api-key: helloworld
+
+### Get all products
+GET {{urlDev}}products
+Content-Type: application/json
+x-api-key: helloworld
+
+### Find a product by id
+GET {{urlDev}}products/:id
+Content-Type: application/json
+x-api-key: helloworld
