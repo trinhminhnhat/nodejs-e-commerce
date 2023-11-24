@@ -13,7 +13,6 @@ class ProductController {
      * @param {Number} productQuantity - quantity of product
      * @param {String} productType - type of product
      * @param {Array} productAttributes - attributes of product
-     * @param {Number} productRatings - ratings of product
      * @param {Array} productVariations - variations of product
      * @return {JSON}
      */
@@ -23,6 +22,34 @@ class ProductController {
             metadata: await ProductService.createProduct(req.body.productType, {
                 ...req.body,
                 productShop: req.user.userId,
+            }),
+        }).send(res);
+    };
+
+    /**
+     * Update a product by id with shop
+     * @param {Number} productId
+     * @param {String} productName - name of product
+     * @param {String} productThumb - url of product's thumbnail
+     * @param {String} productDescription - description of product
+     * @param {Number} productPrice - price of product
+     * @param {Number} productQuantity - quantity of product
+     * @param {String} productType - type of product
+     * @param {Array} productAttributes - attributes of product
+     * @param {Array} productVariations - variations of product
+     * @return {JSON}
+     */
+    update = async (req, res) => {
+        new Ok({
+            message: 'Update a product successfully',
+            metadata: await ProductService.updateProduct({
+                type: req.body.productType,
+                productId: req.params.id,
+                productShop: req.user.userId,
+                payload: {
+                    ...req.body,
+                    productShop: req.user.userId,
+                },
             }),
         }).send(res);
     };

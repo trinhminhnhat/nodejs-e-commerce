@@ -15,24 +15,27 @@ router.get('/search/:keyword', asyncHandler(productController.searchByKeyword));
 router.get('/', asyncHandler(productController.getAllProducts));
 
 // find a product by id
-router.get('/:id', asyncHandler(productController.findProduct));
+router.get('/:id/detail', asyncHandler(productController.findProduct));
 
 // Authentication
 router.use(authentication);
 
-// create product
+// create a product
 router.post('/', asyncHandler(productController.create));
-
-// publish a product
-router.patch('/:id/publish', asyncHandler(productController.publishProductByShop));
-
-// un publish a product
-router.patch('/:id/un-publish', asyncHandler(productController.unPublishProductByShop));
 
 // get all draft products
 router.get('/drafts', asyncHandler(productController.getAllDraftProducts));
 
 // get all published products
 router.get('/published', asyncHandler(productController.getAllPublishedProducts));
+
+// update a product
+router.patch('/:id', asyncHandler(productController.update));
+
+// publish a product
+router.patch('/:id/publish', asyncHandler(productController.publishProductByShop));
+
+// un publish a product
+router.patch('/:id/un-publish', asyncHandler(productController.unPublishProductByShop));
 
 module.exports = router;

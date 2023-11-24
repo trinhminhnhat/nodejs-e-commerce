@@ -1,6 +1,6 @@
 @urlDev=http://localhost:3000/v1/api/
 
-### Create product
+### Create a product
 POST {{urlDev}}products
 Content-Type: application/json
 x-api-key: helloworld
@@ -8,18 +8,39 @@ x-client-id: 1
 authorization: accessToken
 
 {
-    "productName": "iPhone 15 Pro Max 256GB",
+    "productName": "iPhone 15 Pro 123GB",
     "productThumb": "productThumb",
-    "productDescription": "6.7-inch Super Retina XDR display footnote, featuring ProMotion, Always-On, and Dynamic Island",
+    "productDescription": "6.1-inch Super Retina XDR display footnote, featuring ProMotion, Always-On, and Dynamic Island",
     "productPrice": 1199,
     "productQuantity": 100,
     "productType": "Furniture",
     "productAttributes": {
         "brand": "Apple",
-        "size": "Max",
+        "size": "Pro",
         "material": "Steel"
     },
-    "productRatings": 5,
+    "productVariations": ["Normal", "Plus", "Pro", "Pro Max"]
+}
+
+### Update a product
+PATCH  {{urlDev}}products/:id
+Content-Type: application/json
+x-api-key: helloworld
+x-client-id: 1
+authorization: accessToken
+
+{
+    "productName": "iPhone 15 Pro 123GB",
+    "productThumb": "productThumb",
+    "productDescription": "6.1-inch Super Retina XDR display footnote, featuring ProMotion, Always-On, and Dynamic Island",
+    "productPrice": 1199,
+    "productQuantity": 100,
+    "productType": "Furniture",
+    "productAttributes": {
+        "brand": "Apple",
+        "size": "Pro",
+        "material": "Steel"
+    },
     "productVariations": ["Normal", "Plus", "Pro", "Pro Max"]
 }
 

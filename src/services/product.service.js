@@ -10,7 +10,9 @@ const {
     searchProductsByKeyword,
     getAllProducts,
     findProduct,
+    updateProductByIdWithShop,
 } = require('../repositories/product.repository');
+const { removeUndefinedObject, updateNestedObjectParser } = require('../utils');
 
 // define Factory class to create product
 class ProductFactory {
@@ -28,6 +30,14 @@ class ProductFactory {
         return new productClass(payload).createProduct();
     }
 
+    static async updateProduct({ type, productId, productShop, payload }) {
+        const productClass = ProductFactory.productRegistry[type];
+
+        if (!productClass) throw new BadRequestError(`Invalid product type: ${type}`);
+
+        return new productClass(payload).updateProduct({ productId, productShop });
+    }
+
     static async getAllDraftProducts({ productShop, limit = 50, skip = 0 }) {
         const query = { productShop, isDraft: true };
 
@@ -35,6 +45,7 @@ class ProductFactory {
     }
 
     static async getAllPublishedProducts({ productShop, limit = 50, skip = 0 }) {
+        console.log('productShop: ', productShop);
         const query = { productShop, isPublished: true };
 
         return await getAllPublishedProducts({ query, limit, skip });
@@ -52,8 +63,14 @@ class ProductFactory {
         return await searchProductsByKeyword({ keyword });
     }
 
-    static async getAllProducts({ limit = 50, sort = 'ctime', page = 1, filter = {isPublished: true} }) {
-        return await getAllProducts({ limit, sort, page, filter, select: ['productName', 'productPrice', 'productThumb'] });
+    static async getAllProducts({ limit = 50, sort = 'ctime', page = 1, filter = { isPublished: true } }) {
+        return await getAllProducts({
+            limit,
+            sort,
+            page,
+            filter,
+            select: ['productName', 'productPrice', 'productThumb'],
+        });
     }
 
     static async findProduct({ productId }) {
@@ -72,7 +89,6 @@ class Product {
         productType,
         productShop,
         productAttributes,
-        productRatings,
         productVariations,
     }) {
         this.productName = productName;
@@ -83,12 +99,15 @@ class Product {
         this.productType = productType;
         this.productShop = productShop;
         this.productAttributes = productAttributes;
-        this.productRatings = productRatings;
         this.productVariations = productVariations;
     }
 
     async createProduct(productId) {
         return await productSchema.create({ ...this, _id: productId });
+    }
+
+    async updateProduct({ productId, productShop, payload }) {
+        return await updateProductByIdWithShop({ productId, productShop, payload, model: productSchema });
     }
 }
 
@@ -106,6 +125,21 @@ class Clothing extends Product {
 
         return newProduct;
     }
+
+    async updateProduct({ productId, productShop }) {
+        const objectParams = removeUndefinedObject(this);
+
+        if (objectParams.productAttributes) {
+            await updateProductByIdWithShop({
+                productId,
+                productShop,
+                payload: updateNestedObjectParser(objectParams.productAttributes),
+                model: clothingSchema,
+            });
+        }
+
+        return await super.updateProduct({ productId, productShop, payload: updateNestedObjectParser(objectParams) });
+    }
 }
 
 // Define sub-class for different product type Clothing
@@ -122,6 +156,21 @@ class Electronic extends Product {
 
         return newProduct;
     }
+
+    async updateProduct({ productId, productShop }) {
+        const objectParams = removeUndefinedObject(this);
+
+        if (objectParams.productAttributes) {
+            await updateProductByIdWithShop({
+                productId,
+                productShop,
+                payload: updateNestedObjectParser(objectParams.productAttributes),
+                model: electronicSchema,
+            });
+        }
+
+        return await super.updateProduct({ productId, productShop, payload: updateNestedObjectParser(objectParams) });
+    }
 }
 
 // Define sub-class for different product type Furniture
@@ -137,6 +186,21 @@ class Furniture extends Product {
         if (!newProduct) throw new BadRequestError('Error create new product');
 
         return newProduct;
+    }
+
+    async updateProduct({ productId, productShop }) {
+        const objectParams = removeUndefinedObject(this);
+
+        if (objectParams.productAttributes) {
+            await updateProductByIdWithShop({
+                productId,
+                productShop,
+                payload: updateNestedObjectParser(objectParams.productAttributes),
+                model: furnitureSchema,
+            });
+        }
+
+        return await super.updateProduct({ productId, productShop, payload: updateNestedObjectParser(objectParams) });
     }
 }
 
