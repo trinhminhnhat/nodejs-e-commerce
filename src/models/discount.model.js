@@ -44,7 +44,7 @@ const discountSchema = new Schema(
             type: Number,
             required: true,
         },
-        usedCount: {
+        usesCount: {
             type: Number,
             required: true,
         },
