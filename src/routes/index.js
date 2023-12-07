@@ -11,5 +11,6 @@ router.use(permission('0000'));
 
 router.use('/v1/api/auth', require('./access'));
 router.use('/v1/api/products', require('./product'));
+router.use('/v1/api/discounts', require('./discount'));
 
 module.exports = router;

@@ -1,0 +1,85 @@
+@urlDev=http://localhost:3000/v1/api/
+
+### Create a discount
+POST {{urlDev}}discounts
+Content-Type: application/json
+x-api-key: helloworld
+x-client-id: 1
+authorization: accessToken
+
+{
+    "name": "fixed amound discount",
+    "description": "description",
+    "type": "fixed_amount",
+    "value": 10000,
+    "code": "SHOP_ABC",
+    "startDate": "2023-12-12 09:00:00",
+    "endDate": "2023-12-31 09:00:00",
+    "maxUses": 100,
+    "usesCount": 0,
+    "usersUsed": [],
+    "maxUsesPerUser": 1,
+    "minOrderValue": 5000,
+    "isActive": true,
+    "appliesTo": "specificProducts",
+    "productIds": ["1", "2"]
+}
+
+### Get products by discount code
+GET  {{urlDev}}discounts/products?code=SHOP_ABC&shopId=shopId
+Content-Type: application/json
+x-api-key: helloworld
+
+
+### Get discount code by shop
+GET {{urlDev}}discounts?limit=50&page=1
+Content-Type: application/json
+x-api-key: helloworld
+x-client-id: 1
+authorization: accessToken
+
+### Un Publish a product
+PATCH {{urlDev}}products/:id/un-publish
+Content-Type: application/json
+x-api-key: helloworld
+x-client-id: 1
+authorization: accessToken
+
+### Get discount amount
+POST {{urlDev}}discounts/amount
+Content-Type: application/json
+x-api-key: helloworld
+
+{
+    "code": "SHOP_ABC",
+    "userId": 1,
+    "shopId": "shopId",
+    "products": [
+        {
+            "quantity": 5,
+            "productPrice": 100000
+        }
+    ]
+}
+
+### Delete a discount code
+DELETE {{urlDev}}discounts
+Content-Type: application/json
+x-api-key: helloworld
+x-client-id: 1
+authorization: accessToken
+
+{
+    "code": "SHOP_ABC"
+}
+
+### Cancel a discount code
+POST {{urlDev}}discounts/cancel
+Content-Type: application/json
+x-api-key: helloworld
+x-client-id: 1
+authorization: accessToken
+
+{
+    "code": "SHOP_ABC"
+}
