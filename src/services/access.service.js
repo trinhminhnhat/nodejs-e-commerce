@@ -4,10 +4,10 @@ const shopModel = require('../models/shop.model');
 const bcrypt = require('bcrypt');
 const crypto = require('node:crypto');
 
-const { createTokenPair } = require('../auth/authUtils');
+const { createTokenPair, verifyToken } = require('../auth/authUtils');
 const KeyTokenService = require('./keyToken.service');
 const { getInfoData } = require('../utils');
-const { BadRequestError, AuthFailureError } = require('../core/error.response');
+const { BadRequestError, AuthFailureError, ForbiddenError } = require('../core/error.response');
 const { findByEmail } = require('./shop.service');
 
 const RoleShop = {
@@ -87,6 +87,49 @@ class AccessService {
         }
 
         throw new BadRequestError('Error create shop');
+    };
+
+    static handleRefreshToken = async (refreshToken) => {
+        // check refreshToken has been used yet
+        const keyToken = await KeyTokenService.findByRefreshTokenUsed(refreshToken);
+        console.log('keyToken: ', keyToken);
+
+        if (keyToken) {
+            const { userId, email } = await verifyToken(refreshToken, keyToken.privateKey);
+            console.log('1 { userId, email }: ', { userId, email });
+
+            // because refreshToken has been used and use again => delete all token to reduce the risk of hacker attacks
+            await KeyTokenService.deleteKeyTokenByUserId(userId);
+            throw new ForbiddenError('Something wrong happened. Please login again!');
+        }
+
+        const holderToken = await KeyTokenService.findByRefreshToken(refreshToken);
+        console.log('holderToken: ', holderToken);
+        if (!holderToken) throw new AuthFailureError('Shop is not registered1');
+
+        // verify token
+        const { userId, email } = await verifyToken(refreshToken, holderToken.privateKey);
+        console.log('2 { userId, email }: ', { userId, email });
+
+        const foundShop = await findByEmail({ email });
+        if (!foundShop) throw new AuthFailureError('Shop is not registered2');
+
+        // create new pair token
+        const tokens = await createTokenPair({ userId, email }, holderToken.publicKey, holderToken.privateKey);
+
+        await holderToken.updateOne({
+            $set: {
+                refreshToken: tokens.refreshToken,
+            },
+            $addToSet: {
+                refreshTokensUsed: refreshToken,
+            },
+        });
+
+        return {
+            user: { userId, email },
+            tokens,
+        };
     };
 }
 

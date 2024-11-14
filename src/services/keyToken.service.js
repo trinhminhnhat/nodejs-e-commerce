@@ -28,6 +28,18 @@ class KeyTokenService {
             _id: new Types.ObjectId(id),
         });
     };
+
+    static findByRefreshTokenUsed = async (refreshToken) => {
+        return await keyTokenModel.findOne({ refreshTokensUsed: refreshToken }).lean();
+    };
+
+    static findByRefreshToken = async (refreshToken) => {
+        return await keyTokenModel.findOne({ refreshToken });
+    };
+
+    static deleteKeyTokenByUserId = async (userId) => {
+        return await keyTokenModel.deleteMany({ user: new Types.ObjectId(userId) });
+    };
 }
 
 module.exports = KeyTokenService;
