@@ -27,3 +27,10 @@ Content-Type: application/json
 x-api-key: helloworld
 x-client-id: 1
 authorization: accessToken
+
+### Handle refresh token
+POST {{urlDev}}shop/handle-refresh-token
+Content-Type: application/json
+x-api-key: helloworld
+x-client-id: 1
+x-rtoken-id: refreshToken
