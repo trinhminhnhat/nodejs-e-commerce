@@ -6,32 +6,33 @@ const COLLECTION_NAME = 'Products';
 // Declare the Schema of the Mongo model
 const productSchema = new Schema(
     {
-        product_name: {
+        productName: {
             type: String,
             required: true,
         },
-        product_thumb: {
+        productThumb: {
             type: String,
             required: true,
         },
-        product_thumb: {
+        productDescription: String,
+        productPrice: {
             type: Number,
             required: true,
         },
-        product_quantity: {
+        productQuantity: {
             type: Number,
             required: true,
         },
-        product_type: {
+        productType: {
             type: String,
             required: true,
             enum: ['Electronics', 'Clothing', 'Furniture'],
         },
-        product_shop: {
+        productShop: {
             type: Types.ObjectId,
             ref: 'Shop',
         },
-        product_attributes: {
+        productAttributes: {
             type: Types.Mixed,
             required: true,
         },
@@ -74,7 +75,7 @@ const electronicSchema = new Schema(
 
 // Export the model
 module.exports = {
-    product: model(DOCUMENT_NAME, productSchema),
-    clothing: model('Clothing', clothingSchema),
-    electronic: model('Electronic', electronicSchema),
+    productSchema: model(DOCUMENT_NAME, productSchema),
+    clothingSchema: model('Clothing', clothingSchema),
+    electronicSchema: model('Electronic', electronicSchema),
 };
